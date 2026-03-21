@@ -3,7 +3,7 @@ export const PLAYER = {
   HEIGHT: 20,
   Y_POSITION: 230,
   FRICTION: 0.9,
-  MAX_SPEED: 200,
+  MAX_SPEED: 100,
   INVINCIBILITY_MS: 500,
 } as const;
 

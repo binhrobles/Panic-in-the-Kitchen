@@ -1,6 +1,9 @@
 import { SCREEN } from "../shared/constants";
+import { getHorizontalInput } from "../shared/input";
 import type { Vec2, Entity } from "../shared/types";
 import { PLAYER, type Grade } from "./constants";
+
+const MAX_PLAYER_POS = SCREEN.WIDTH - PLAYER.WIDTH;
 
 export class Player implements Entity {
   pos: Vec2;
@@ -21,10 +24,17 @@ export class Player implements Entity {
     this.color = playerIndex === 1 ? "red" : "blue";
   }
 
-  update(_dt: number): void {
-    // TODO: call getHorizontalInput(this.playerIndex), apply to vel.x
-    // apply friction (vel.x *= FRICTION), clamp to MAX_SPEED
+  update(dt: number): void {
+    // add new input to existing velocity
+    this.vel += getHorizontalInput(this.playerIndex);
+
+    // velocity naturally decays due to friction
+    this.vel *= PLAYER.FRICTION;
+    this.vel = Math.min(this.vel, PLAYER.MAX_SPEED);
+
     // update pos.x += vel.x * dt, clamp to screen bounds
+    this.pos.x += this.vel * dt;
+    this.pos.x = Math.max(0, Math.min(MAX_PLAYER_POS, this.pos.x));
   }
 
   draw(ctx: CanvasRenderingContext2D): void {

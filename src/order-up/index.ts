@@ -37,7 +37,6 @@ export class OrderUpGame {
     }
 
     if (this.currentScene === "running") {
-      console.log("running");
     }
   }
 
@@ -101,6 +100,7 @@ export class OrderUpGame {
 
   // --- Ready ---
   private updateReady(dt: number): void {
+    this.updateRunning(dt);
     this.ready_timer_ms -= dt;
 
     if (this.ready_timer_ms <= 0) {
@@ -137,13 +137,16 @@ export class OrderUpGame {
   }
 
   // --- Running ---
-  private updateRunning(_dt: number): void {
+  private updateRunning(dt: number): void {
     // TODO:
     // 1. update scrollSpeed (check if in slowdown)
     // 2. scrollDistance += scrollSpeed * dt
     // 3. move all obstacles: pos.y += scrollSpeed * dt
     // 4. update obstacle independent movement (moving type)
     // 5. update players (input + physics)
+    this.player_1?.update(dt);
+    this.player_2?.update(dt);
+
     // 6. check player-obstacle collisions → grade drop + slowdown + invincibility
     // 7. check player-player collisions (2P) → momentum transfer
     // 8. check if scrollDistance >= totalRunLength → changeScene('results')

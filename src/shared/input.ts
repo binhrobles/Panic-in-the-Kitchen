@@ -18,12 +18,14 @@ export function detectStartInput(): number | null {
 export function getHorizontalInput(playerIndex: number): number {
   const spinner = playerIndex === 1 ? PLAYER_1_SPINNER.SPINNER : PLAYER_2_SPINNER.SPINNER;
   const spinnerDelta = spinner.consume_step_delta();
+
+  // TODO: need to understand the numeric range bw a "fast" spin vs a slow spin
   if (spinnerDelta !== 0) {
     return spinnerDelta;
   }
 
   const dpad = playerIndex === 1 ? PLAYER_1_INPUT.DPAD : PLAYER_2_INPUT.DPAD;
-  const DPAD_WEIGHT = 0.2;
+  const DPAD_WEIGHT = 0.1;
 
   if (dpad.left) {
     return -DPAD_WEIGHT;
