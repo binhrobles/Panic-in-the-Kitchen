@@ -1,5 +1,5 @@
-import type { Obstacle } from './entities';
-import { type Grade, GRADES } from './constants';
+import type { Obstacle } from "./entities";
+import { type Grade, GRADES } from "./constants";
 
 /** Generate the full obstacle map for a run */
 export function generateRun(): Obstacle[] {
@@ -15,6 +15,6 @@ export function generateRun(): Obstacle[] {
 /** Drop grade by one step, returns new grade */
 export function dropGrade(current: Grade): Grade {
   const index = GRADES.indexOf(current);
-  if (index === -1 || index >= GRADES.length - 1) return 'F';
+  if (index === -1 || index >= GRADES.length - 1) return "F";
   return GRADES[index + 1];
 }

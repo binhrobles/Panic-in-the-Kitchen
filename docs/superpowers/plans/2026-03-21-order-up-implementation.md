@@ -4,7 +4,7 @@
 
 **Goal:** Build a 1-2 player waiter runner game for the RCade arcade cabinet where players dodge kitchen obstacles to deliver a dish, scored by a letter grade.
 
-**Architecture:** Vanilla Canvas 2D with a simple game loop and state machine. Code split into `shared/` (input, physics, constants reusable across future Krazy Kitchen games) and `order-up/` (game-specific states, entities, systems). All game objects are plain TS classes with `update(dt)` and `draw(ctx)` methods.
+**Architecture:** Vanilla Canvas 2D with a simple game loop and state machine. Code split into `shared/` (input, physics, constants reusable across future Panic! in the Kitchen games) and `order-up/` (game-specific states, entities, systems). All game objects are plain TS classes with `update(dt)` and `draw(ctx)` methods.
 
 **Tech Stack:** TypeScript, Canvas 2D API, Vite, RCade SDK (@rcade/plugin-input-classic, @rcade/plugin-input-spinners)
 
@@ -37,6 +37,7 @@ src/
 ### Task 1: Scaffold project structure (Claude)
 
 **Files:**
+
 - Create: `src/shared/types.ts`
 - Create: `src/shared/input.ts`
 - Create: `src/shared/physics.ts`
@@ -97,7 +98,7 @@ export function getHorizontalInput(playerIndex: number): number {
 - [ ] **Step 4: Create `src/shared/physics.ts`** with stubs
 
 ```typescript
-import type { Entity } from './types';
+import type { Entity } from "./types";
 
 /** Returns true if two axis-aligned rectangles overlap */
 export function checkAABB(a: Entity, b: Entity): boolean {
@@ -117,51 +118,59 @@ export function resolveCollision(a: Entity, b: Entity): void {
 export const PLAYER = {
   WIDTH: 16,
   HEIGHT: 20,
-  Y_POSITION: 230,       // fixed Y near bottom
-  FRICTION: 0.9,          // velocity decay per frame
-  MAX_SPEED: 200,         // pixels per second
-  INVINCIBILITY_MS: 500,  // after collision
+  Y_POSITION: 230, // fixed Y near bottom
+  FRICTION: 0.9, // velocity decay per frame
+  MAX_SPEED: 200, // pixels per second
+  INVINCIBILITY_MS: 500, // after collision
 } as const;
 
 export const WORLD = {
-  SCROLL_SPEED: 60,       // pixels per second
-  SLOWDOWN_FACTOR: 0.3,   // multiplier during collision slowdown
-  SLOWDOWN_MS: 300,       // duration of slowdown
-  RUN_SEGMENTS: 20,       // number of screen-height segments per run
+  SCROLL_SPEED: 60, // pixels per second
+  SLOWDOWN_FACTOR: 0.3, // multiplier during collision slowdown
+  SLOWDOWN_MS: 300, // duration of slowdown
+  RUN_SEGMENTS: 20, // number of screen-height segments per run
 } as const;
 
 export const GRADES = [
-  'A+', 'A', 'A-',
-  'B+', 'B', 'B-',
-  'C+', 'C', 'C-',
-  'D+', 'D', 'D-',
-  'F',
+  "A+",
+  "A",
+  "A-",
+  "B+",
+  "B",
+  "B-",
+  "C+",
+  "C",
+  "C-",
+  "D+",
+  "D",
+  "D-",
+  "F",
 ] as const;
 
-export type Grade = typeof GRADES[number];
+export type Grade = (typeof GRADES)[number];
 
 export const COLORS = {
-  P1: '#4488ff',
-  P2: '#ff4444',
-  OBSTACLE_STATIC: '#666666',
-  OBSTACLE_MOVING: '#aa6633',
-  OBSTACLE_CHOKEPOINT: '#555555',
-  BACKGROUND: '#1a1a2e',
+  P1: "#4488ff",
+  P2: "#ff4444",
+  OBSTACLE_STATIC: "#666666",
+  OBSTACLE_MOVING: "#aa6633",
+  OBSTACLE_CHOKEPOINT: "#555555",
+  BACKGROUND: "#1a1a2e",
 } as const;
 ```
 
 - [ ] **Step 6: Create `src/order-up/entities.ts`** with class shells
 
 ```typescript
-import type { Vec2, Entity } from '../shared/types';
-import type { Grade } from './constants';
+import type { Vec2, Entity } from "../shared/types";
+import type { Grade } from "./constants";
 
 export class Player implements Entity {
   pos: Vec2;
   size: Vec2;
   vel: Vec2;
   color: string;
-  grade: Grade = 'A+';
+  grade: Grade = "A+";
   invincibleUntil: number = 0;
 
   playerIndex: number;
@@ -172,7 +181,7 @@ export class Player implements Entity {
     this.pos = { x: 0, y: 0 };
     this.size = { x: 0, y: 0 };
     this.vel = { x: 0, y: 0 };
-    this.color = '';
+    this.color = "";
   }
 
   update(dt: number): void {
@@ -184,7 +193,7 @@ export class Player implements Entity {
   }
 }
 
-export type ObstacleType = 'static' | 'moving' | 'chokepoint';
+export type ObstacleType = "static" | "moving" | "chokepoint";
 
 export class Obstacle implements Entity {
   pos: Vec2;
@@ -198,7 +207,7 @@ export class Obstacle implements Entity {
     this.pos = { ...pos };
     this.size = { ...size };
     this.vel = { x: 0, y: 0 };
-    this.color = '';
+    this.color = "";
     // TODO: set color based on type, set vel for moving obstacles
   }
 
@@ -215,8 +224,8 @@ export class Obstacle implements Entity {
 - [ ] **Step 7: Create `src/order-up/systems.ts`** with stubs
 
 ```typescript
-import type { Obstacle } from './entities';
-import type { Grade } from './constants';
+import type { Obstacle } from "./entities";
+import type { Grade } from "./constants";
 
 /** Generate the full obstacle map for a run */
 export function generateRun(): Obstacle[] {
@@ -234,45 +243,77 @@ export function dropGrade(current: Grade): Grade {
 - [ ] **Step 8: Create `src/order-up/states.ts`** with state shells
 
 ```typescript
-import type { GameState } from '../shared/types';
+import type { GameState } from "../shared/types";
 
 // Note: states will need a reference to OrderUpGame for changeState() calls.
 // This will be wired up in Task 8 — add constructor params or setters then.
 
 export class TitleState implements GameState {
-  enter(): void { /* TODO */ }
-  update(dt: number): void { /* TODO: detect start button, 1P vs 2P */ }
-  draw(ctx: CanvasRenderingContext2D): void { /* TODO: draw title screen */ }
-  exit(): void { /* TODO */ }
+  enter(): void {
+    /* TODO */
+  }
+  update(dt: number): void {
+    /* TODO: detect start button, 1P vs 2P */
+  }
+  draw(ctx: CanvasRenderingContext2D): void {
+    /* TODO: draw title screen */
+  }
+  exit(): void {
+    /* TODO */
+  }
 }
 
 export class ReadyState implements GameState {
-  enter(): void { /* TODO: start countdown */ }
-  update(dt: number): void { /* TODO: tick countdown, transition when done */ }
-  draw(ctx: CanvasRenderingContext2D): void { /* TODO: draw countdown */ }
-  exit(): void { /* TODO */ }
+  enter(): void {
+    /* TODO: start countdown */
+  }
+  update(dt: number): void {
+    /* TODO: tick countdown, transition when done */
+  }
+  draw(ctx: CanvasRenderingContext2D): void {
+    /* TODO: draw countdown */
+  }
+  exit(): void {
+    /* TODO */
+  }
 }
 
 export class RunningState implements GameState {
-  enter(): void { /* TODO: generate run, create players */ }
-  update(dt: number): void { /* TODO: scroll world, update players/obstacles, check collisions */ }
-  draw(ctx: CanvasRenderingContext2D): void { /* TODO: draw everything */ }
-  exit(): void { /* TODO */ }
+  enter(): void {
+    /* TODO: generate run, create players */
+  }
+  update(dt: number): void {
+    /* TODO: scroll world, update players/obstacles, check collisions */
+  }
+  draw(ctx: CanvasRenderingContext2D): void {
+    /* TODO: draw everything */
+  }
+  exit(): void {
+    /* TODO */
+  }
 }
 
 export class ResultsState implements GameState {
-  enter(): void { /* TODO */ }
-  update(dt: number): void { /* TODO: detect restart input */ }
-  draw(ctx: CanvasRenderingContext2D): void { /* TODO: show grades */ }
-  exit(): void { /* TODO */ }
+  enter(): void {
+    /* TODO */
+  }
+  update(dt: number): void {
+    /* TODO: detect restart input */
+  }
+  draw(ctx: CanvasRenderingContext2D): void {
+    /* TODO: show grades */
+  }
+  exit(): void {
+    /* TODO */
+  }
 }
 ```
 
 - [ ] **Step 9: Create `src/order-up/index.ts`** — game state machine
 
 ```typescript
-import type { GameState } from '../shared/types';
-import { TitleState, ReadyState, RunningState, ResultsState } from './states';
+import type { GameState } from "../shared/types";
+import { TitleState, ReadyState, RunningState, ResultsState } from "./states";
 
 export class OrderUpGame {
   private currentState: GameState;
@@ -308,16 +349,16 @@ export class OrderUpGame {
 - [ ] **Step 10: Rewrite `src/main.ts`** — canvas setup + main loop
 
 ```typescript
-import './style.css';
-import { SCREEN } from './shared/constants';
-import { OrderUpGame } from './order-up/index';
+import "./style.css";
+import { SCREEN } from "./shared/constants";
+import { OrderUpGame } from "./order-up/index";
 
-const canvas = document.createElement('canvas');
+const canvas = document.createElement("canvas");
 canvas.width = SCREEN.WIDTH;
 canvas.height = SCREEN.HEIGHT;
-document.querySelector<HTMLDivElement>('#app')!.appendChild(canvas);
+document.querySelector<HTMLDivElement>("#app")!.appendChild(canvas);
 
-const ctx = canvas.getContext('2d')!;
+const ctx = canvas.getContext("2d")!;
 const game = new OrderUpGame();
 
 let lastTime = performance.now();
@@ -332,7 +373,7 @@ function loop(now: number): void {
   requestAnimationFrame(loop);
 }
 
-game.changeState('title');
+game.changeState("title");
 requestAnimationFrame(loop);
 ```
 
@@ -353,9 +394,11 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 2: Implement input system (User)
 
 **Files:**
+
 - Implement: `src/shared/input.ts`
 
 **Guidance:**
+
 - Import `PLAYER_1` from `@rcade/plugin-input-classic` and `PLAYER_1 as PLAYER_1_SPINNER` from `@rcade/plugin-input-spinners`
 - The existing `main.ts` shows how to read these: `PLAYER_1.DPAD.left/right` for D-pad, `PLAYER_1_SPINNER.SPINNER.consume_step_delta()` for spinner
 - Spinner delta is the primary input; D-pad is fallback. If spinner delta is non-zero, use it. Otherwise check D-pad and return a fixed delta value (e.g., ±1) when pressed.
@@ -373,9 +416,11 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 3: Implement player entity (User)
 
 **Files:**
+
 - Implement: `src/order-up/entities.ts` (Player class)
 
 **Guidance:**
+
 - Constructor: set `pos.x` based on playerIndex (P1 starts left-of-center, P2 right-of-center), `pos.y` to `PLAYER.Y_POSITION`, `size` to player dimensions, `color` from `COLORS.P1/P2`
 - `update(dt)`: call `getHorizontalInput(playerIndex)`, add to `vel.x` (scaled by sensitivity), apply `FRICTION` each frame (`vel.x *= FRICTION`), clamp `vel.x` to `MAX_SPEED`, update `pos.x += vel.x * dt`, clamp `pos.x` to screen bounds
 - `draw(ctx)`: `ctx.fillStyle = this.color; ctx.fillRect(pos.x, pos.y, size.x, size.y)`
@@ -393,10 +438,12 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 4: Implement world scrolling & obstacle rendering (User)
 
 **Files:**
+
 - Implement: `src/order-up/entities.ts` (Obstacle class)
 - Implement: `src/order-up/states.ts` (RunningState)
 
 **Guidance:**
+
 - Obstacle Y movement is driven by `RunningState`, not the obstacle itself — the state sets each obstacle's `pos.y += scrollSpeed * dt` each frame (since `scrollSpeed` varies during slowdown). Obstacle's own `update(dt)` handles only its independent movement (e.g., `moving` type oscillating `pos.x` with `vel.x`).
 - Obstacle `draw(ctx)`: same pattern as Player — `fillRect` with type-based color.
 - In `RunningState`: maintain a `scrollSpeed` property (starts at `WORLD.SCROLL_SPEED`). Each frame, update all obstacles. When an obstacle's `pos.y` is past the screen bottom, it's gone.
@@ -415,10 +462,12 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 5: Implement collision detection (User)
 
 **Files:**
+
 - Implement: `src/shared/physics.ts`
 - Modify: `src/order-up/states.ts` (RunningState)
 
 **Guidance:**
+
 - `checkAABB(a, b)`: standard rectangle overlap test. Two rects overlap when `a.pos.x < b.pos.x + b.size.x && a.pos.x + a.size.x > b.pos.x && a.pos.y < b.pos.y + b.size.y && a.pos.y + a.size.y > b.pos.y`
 - In `RunningState.update()`: for each obstacle, check collision with each player. On hit:
   1. Drop the grade (for now, just log or hardcode the drop — `dropGrade()` is implemented in Task 6)
@@ -439,10 +488,12 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 6: Implement grade scoring & display (User)
 
 **Files:**
+
 - Implement: `src/order-up/systems.ts` (dropGrade)
 - Modify: `src/order-up/states.ts` (RunningState.draw for HUD)
 
 **Guidance:**
+
 - `dropGrade`: find index of `current` in `GRADES` array, return `GRADES[index + 1]` or `'F'` if already at the end
 - HUD drawing: in `RunningState.draw()`, after drawing game objects, draw grade text. Use `ctx.fillText()` with a large font. P1 top-left, P2 top-right. Use player colors for the text.
 - Consider: `ctx.font = 'bold 20px monospace'` and `ctx.textAlign` ('left' for P1, 'right' for P2)
@@ -459,9 +510,11 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 7: Implement procedural generation (User)
 
 **Files:**
+
 - Implement: `src/order-up/systems.ts` (generateRun)
 
 **Guidance:**
+
 - Divide the run into `RUN_SEGMENTS` segments, each `SCREEN.HEIGHT` tall. Obstacles are positioned at negative Y values (above the screen, scrolling down).
 - Segment `i` obstacle at Y = `-(i * SCREEN.HEIGHT)` to `-(i * SCREEN.HEIGHT + SCREEN.HEIGHT)`
 - Difficulty ramp: early segments get 1-2 static obstacles. Later segments get more obstacles, moving obstacles appear after ~30%, chokepoints after ~50%.
@@ -485,10 +538,12 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 8: Implement game state machine flow (User)
 
 **Files:**
+
 - Modify: `src/order-up/states.ts` (all states)
 - Modify: `src/order-up/index.ts` (wire transitions)
 
 **Guidance:**
+
 - The states need a reference to the game's `changeState()` method. Options: pass a callback in constructor, or pass the `OrderUpGame` instance.
 - **TitleState:** Draw "ORDER UP!" text and "Press Start" prompt. In `update()`, check `SYSTEM.ONE_PLAYER` or `SYSTEM.TWO_PLAYER` to detect player count. Store player count, then `changeState('ready')`.
 - **ReadyState:** On `enter()`, start a 3-second countdown. Draw countdown numbers ("3", "2", "1", "ORDER UP!"). When done, `changeState('running')`.
@@ -511,11 +566,13 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 9: Implement 2-player support (User)
 
 **Files:**
+
 - Modify: `src/shared/input.ts` (P2 input)
 - Modify: `src/shared/physics.ts` (player-player collision)
 - Modify: `src/order-up/states.ts` (RunningState for 2P)
 
 **Guidance:**
+
 - **Input:** Add P2 spinner/D-pad imports. `getHorizontalInput(1)` reads P2's controls.
 - **Player-player collision:** In `RunningState.update()`, check AABB between the two players. Use `resolveCollision()` which should:
   1. Calculate overlap amount
@@ -539,10 +596,12 @@ git commit -m "scaffold: ORDER UP! project structure with stubs"
 ### Task 10: Polish & tuning pass (User)
 
 **Files:**
+
 - Modify: `src/order-up/constants.ts` (tune values)
 - Modify: various files as needed
 
 **Guidance:**
+
 - Play-test repeatedly and adjust constants: scroll speed, friction, spinner sensitivity, slowdown duration, obstacle density, chokepoint gap width, invincibility duration
 - Consider visual polish (all still colored rectangles, but): player flashing during invincibility, grade color change as it drops (green → yellow → red), brief screen shake on collision
 - Consider adding a simple "kitchen floor" background pattern (checkerboard or tile lines) to convey scrolling speed

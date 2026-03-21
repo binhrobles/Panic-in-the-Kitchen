@@ -2,14 +2,14 @@
 
 **Game:** ORDER UP!
 **Platform:** RCade arcade cabinet (336x262px, spinner + D-pad + A/B buttons)
-**Part of:** Krazy Kitchen (multi-minigame collection, inspired by Panic Park)
+**Part of:** Panic! in the Kitchen (multi-minigame collection, inspired by Panic Park)
 **Players:** 1-2 simultaneous
 
 ## Overview
 
 ORDER UP! is a waiter runner where players dash through a chaotic kitchen to deliver a dish. The player is fixed vertically while the kitchen scrolls toward them. They control only horizontal movement via the spinner, dodging obstacles to keep their dish (and their grade) intact.
 
-This is the first of potentially multiple Krazy Kitchen minigames. A future "Busboy" mode will add a dish-stack balancing mechanic on top of the same runner foundation.
+This is the first of potentially multiple Panic! in the Kitchen minigames. A future "Busboy" mode will add a dish-stack balancing mechanic on top of the same runner foundation.
 
 ## Controls
 
@@ -144,7 +144,7 @@ src/
 
 ### Design Principles
 
-- **Shared vs game-specific separation:** `shared/` contains input abstraction and basic physics reusable across future Krazy Kitchen minigames. `order-up/` contains everything specific to this game.
+- **Shared vs game-specific separation:** `shared/` contains input abstraction and basic physics reusable across future Panic! in the Kitchen minigames. `order-up/` contains everything specific to this game.
 - **Plain objects/classes:** No framework. Game objects are simple TS constructs with position, velocity, and update/draw methods.
 - **Delta time:** All updates receive `dt` for frame-rate independence.
 - **Constants file:** All tuning values (scroll speed, friction, slowdown duration, player size, etc.) in dedicated constants files for easy tweaking.

@@ -1,13 +1,13 @@
-import './style.css';
-import { SCREEN } from './shared/constants';
-import { OrderUpGame } from './order-up/index';
+import "./style.css";
+import { SCREEN } from "./shared/constants";
+import { OrderUpGame } from "./order-up/index";
 
-const canvas = document.createElement('canvas');
+const canvas = document.createElement("canvas");
 canvas.width = SCREEN.WIDTH;
 canvas.height = SCREEN.HEIGHT;
-document.querySelector<HTMLDivElement>('#app')!.appendChild(canvas);
+document.querySelector<HTMLDivElement>("#app")!.appendChild(canvas);
 
-const ctx = canvas.getContext('2d')!;
+const ctx = canvas.getContext("2d")!;
 const game = new OrderUpGame();
 
 let lastTime = performance.now();

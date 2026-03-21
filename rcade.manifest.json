@@ -1,7 +1,7 @@
 {
   "$schema": "https://rcade.dev/manifest.schema.json",
-  "name": "krazy-kitchen",
-  "display_name": "Krazy Kitchen",
+  "name": "panic-in-the-kitchen",
+  "display_name": "Panic! in the Kitchen",
   "description": "Don't make a scene!",
   "visibility": "private",
   "authors": [

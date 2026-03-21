@@ -1,12 +1,13 @@
-import { SCREEN } from '../shared/constants';
-import { detectStartInput } from '../shared/input';
-import { COLORS } from './constants';
+import { SCREEN } from "../shared/constants";
+import { detectStartInput } from "../shared/input";
+import { COLORS } from "./constants";
+import { Player } from "./entities";
 
-type SceneName = 'title' | 'ready' | 'running' | 'results';
+type SceneName = "title" | "ready" | "running" | "results";
 
 export class OrderUpGame {
   // title
-  currentScene: SceneName = 'title';
+  currentScene: SceneName = "title";
   playerCount: number = 1;
 
   // ready
@@ -14,29 +15,46 @@ export class OrderUpGame {
 
   // running
   player_progression: number = 0;
+  player_1: Player | null = null;
+  player_2: Player | null = null;
 
   // --- Top Level Functions ---
   changeScene(name: SceneName): void {
     this.currentScene = name;
 
-    if (this.currentScene === 'ready') {
+    if (this.currentScene === "ready") {
       this.ready_timer_ms = 4000;
+
       this.player_progression = 0;
+      if (this.playerCount === 1) {
+        this.player_1 = new Player(1, true);
+      } else {
+        this.player_1 = new Player(1, false);
+        this.player_2 = new Player(2, false);
+      }
 
       // TODO: generate the map, set in state, so we can draw countdown _on_ game
     }
 
-    if (this.currentScene === 'running') {
-      console.log('running');
+    if (this.currentScene === "running") {
+      console.log("running");
     }
   }
 
   update(dt: number): void {
     switch (this.currentScene) {
-      case 'title': this.updateTitle(dt); break;
-      case 'ready': this.updateReady(dt); break;
-      case 'running': this.updateRunning(dt); break;
-      case 'results': this.updateResults(dt); break;
+      case "title":
+        this.updateTitle(dt);
+        break;
+      case "ready":
+        this.updateReady(dt);
+        break;
+      case "running":
+        this.updateRunning(dt);
+        break;
+      case "results":
+        this.updateResults(dt);
+        break;
     }
   }
 
@@ -45,10 +63,18 @@ export class OrderUpGame {
     ctx.fillRect(0, 0, SCREEN.WIDTH, SCREEN.HEIGHT);
 
     switch (this.currentScene) {
-      case 'title': this.drawTitle(ctx); break;
-      case 'ready': this.drawReady(ctx); break;
-      case 'running': this.drawRunning(ctx); break;
-      case 'results': this.drawResults(ctx); break;
+      case "title":
+        this.drawTitle(ctx);
+        break;
+      case "ready":
+        this.drawReady(ctx);
+        break;
+      case "running":
+        this.drawRunning(ctx);
+        break;
+      case "results":
+        this.drawResults(ctx);
+        break;
     }
   }
 
@@ -57,20 +83,20 @@ export class OrderUpGame {
     const mode = detectStartInput();
     if (mode) {
       this.playerCount = mode;
-      this.changeScene('ready');
+      this.changeScene("ready");
     }
   }
 
   private drawTitle(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-    ctx.font = '48px serif';
-    ctx.fillText('Krazy Kitchen', SCREEN.WIDTH / 2, SCREEN.HEIGHT / 3);
+    ctx.font = "32px serif";
+    ctx.fillText("Panic! in the Kitchen", SCREEN.WIDTH / 2, SCREEN.HEIGHT / 3);
 
-    ctx.font = '32px serif';
-    ctx.fillText('1P or 2P?', SCREEN.WIDTH / 2, SCREEN.HEIGHT * 2 / 3);
+    ctx.font = "28px serif";
+    ctx.fillText("1P or 2P?", SCREEN.WIDTH / 2, (SCREEN.HEIGHT * 2) / 3);
   }
 
   // --- Ready ---
@@ -79,32 +105,33 @@ export class OrderUpGame {
 
     if (this.ready_timer_ms <= 0) {
       this.ready_timer_ms = 4000;
-      this.changeScene('running');
+      this.changeScene("running");
     }
   }
 
   private drawReady(ctx: CanvasRenderingContext2D): void {
-    // TODO: draw starting game state, countdown goes over _that_
+    // countdown is drawn _over_ the starting state
+    this.drawRunning(ctx);
 
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = '48px serif';
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "48px serif";
 
     const labelPosition: [number, number] = [SCREEN.WIDTH / 2, SCREEN.HEIGHT / 3];
     const countdownPosition: [number, number] = [SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2];
 
     if (this.ready_timer_ms <= 1000) {
-      ctx.fillText('ORDER UP!!', ...countdownPosition);
+      ctx.fillText("ORDER UP!!", ...countdownPosition);
     } else {
-      ctx.fillText('READY IN', ...labelPosition);
+      ctx.fillText("READY IN", ...labelPosition);
 
       if (this.ready_timer_ms <= 2000) {
-        ctx.fillText('1...', ...countdownPosition);
+        ctx.fillText("1...", ...countdownPosition);
       } else if (this.ready_timer_ms <= 3000) {
-        ctx.fillText('2...', ...countdownPosition);
+        ctx.fillText("2...", ...countdownPosition);
       } else {
-        ctx.fillText('3...', ...countdownPosition);
+        ctx.fillText("3...", ...countdownPosition);
       }
     }
   }
@@ -122,10 +149,13 @@ export class OrderUpGame {
     // 8. check if scrollDistance >= totalRunLength → changeScene('results')
   }
 
-  private drawRunning(_ctx: CanvasRenderingContext2D): void {
+  private drawRunning(ctx: CanvasRenderingContext2D): void {
     // TODO:
     // 1. draw obstacles
     // 2. draw players
+    this.player_1?.draw(ctx);
+    this.player_2?.draw(ctx);
+
     // 3. draw HUD (P1 grade top-left, P2 grade top-right)
   }
 

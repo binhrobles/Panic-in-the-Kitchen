@@ -1,4 +1,4 @@
-import type { Entity } from './types';
+import type { Entity } from "./types";
 
 /** Returns true if two axis-aligned rectangles overlap */
 export function checkAABB(_a: Entity, _b: Entity): boolean {

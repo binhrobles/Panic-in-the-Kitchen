@@ -1,21 +1,27 @@
 {
-    "name": "krazy-kitchen",
-    "private": true,
-    "version": "1.0.0",
-    "description": "Don&#39;t make a scene!",
-    "type": "module",
-    "scripts": {
-        "dev": "concurrently \"vite --port 5173 --strictPort\" \"rcade dev http://localhost:5173\"",
-        "build": "vite build"
-    },
-    "devDependencies": {
-        "concurrently": "^9.0.0",
-        "rcade": "^0.0.42",
-        "typescript": "~5.9.3",
-        "vite": "^7.2.4"
-    },
-    "dependencies": {
-        "@rcade/plugin-input-classic": "^0.2.1",
-        "@rcade/plugin-input-spinners": "^0.2.2"
-    }
+  "name": "panic-in-the-kitchen",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Don&#39;t make a scene!",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite --port 5173 --strictPort\" \"rcade dev http://localhost:5173\"",
+    "build": "vite build",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
+  },
+  "dependencies": {
+    "@rcade/plugin-input-classic": "^0.2.1",
+    "@rcade/plugin-input-spinners": "^0.2.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
+    "rcade": "^0.0.42",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4"
+  }
 }
