@@ -1,3 +1,11 @@
+import { SYSTEM } from "@rcade/plugin-input-classic";
+
+export function detectStartInput(): number | null {
+  if (SYSTEM.ONE_PLAYER) return 1;
+  if (SYSTEM.TWO_PLAYER) return 2;
+  return null;
+}
+
 /** Returns horizontal delta this frame. Reads spinner (primary) or D-pad (fallback). */
 export function getHorizontalInput(_playerIndex: number): number {
   // TODO: read from spinner (primary) or D-pad (fallback)
@@ -9,3 +17,4 @@ export function getHorizontalInput(_playerIndex: number): number {
   // For P2, import PLAYER_2 from both plugins
   return 0;
 }
+

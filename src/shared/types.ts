@@ -12,9 +12,3 @@ export interface Entity {
   draw(ctx: CanvasRenderingContext2D): void;
 }
 
-export interface GameState {
-  enter(): void;
-  update(dt: number): void;
-  draw(ctx: CanvasRenderingContext2D): void;
-  exit(): void;
-}

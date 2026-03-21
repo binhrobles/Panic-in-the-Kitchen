@@ -13,7 +13,7 @@ const game = new OrderUpGame();
 let lastTime = performance.now();
 
 function loop(now: number): void {
-  const dt = (now - lastTime) / 1000;
+  const dt = now - lastTime;
   lastTime = now;
 
   game.update(dt);
@@ -22,5 +22,4 @@ function loop(now: number): void {
   requestAnimationFrame(loop);
 }
 
-game.changeState('title');
 requestAnimationFrame(loop);
