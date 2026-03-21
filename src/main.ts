@@ -1,43 +1,26 @@
-import './style.css'
-import { PLAYER_1, SYSTEM } from '@rcade/plugin-input-classic'
-import { PLAYER_1 as PLAYER_1_SPINNER } from '@rcade/plugin-input-spinners'
+import './style.css';
+import { SCREEN } from './shared/constants';
+import { OrderUpGame } from './order-up/index';
 
-const app = document.querySelector<HTMLDivElement>('#app')!
-app.innerHTML = `
-  <h1>Krazy Kitchen</h1>
-  <p id="status">Press 1P START</p>
-  <div id="controls"></div>
-`
+const canvas = document.createElement('canvas');
+canvas.width = SCREEN.WIDTH;
+canvas.height = SCREEN.HEIGHT;
+document.querySelector<HTMLDivElement>('#app')!.appendChild(canvas);
 
-const status = document.querySelector<HTMLParagraphElement>('#status')!
-const controls = document.querySelector<HTMLDivElement>('#controls')!
+const ctx = canvas.getContext('2d')!;
+const game = new OrderUpGame();
 
-let gameStarted = false
+let lastTime = performance.now();
 
-function update() {
-  if (!gameStarted) {
-    if (SYSTEM.ONE_PLAYER) {
-      gameStarted = true
-      status.textContent = 'Game Started!'
-    }
-  } else {
-    const inputs: string[] = []
-    if (PLAYER_1.DPAD.up) inputs.push('↑')
-    if (PLAYER_1.DPAD.down) inputs.push('↓')
-    if (PLAYER_1.DPAD.left) inputs.push('←')
-    if (PLAYER_1.DPAD.right) inputs.push('→')
-    if (PLAYER_1.A) inputs.push('A')
-    if (PLAYER_1.B) inputs.push('B')
+function loop(now: number): void {
+  const dt = (now - lastTime) / 1000;
+  lastTime = now;
 
-    const player1SpinnerDelta = PLAYER_1_SPINNER.SPINNER.consume_step_delta();
-    if (player1SpinnerDelta) {
-      inputs.push(`spin[${player1SpinnerDelta}]`);
-    }
+  game.update(dt);
+  game.draw(ctx);
 
-    controls.textContent = inputs.length > 0 ? inputs.join(' ') : '-'
-  }
-
-  requestAnimationFrame(update)
+  requestAnimationFrame(loop);
 }
 
-update()
+game.changeState('title');
+requestAnimationFrame(loop);
