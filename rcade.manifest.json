@@ -1,0 +1,18 @@
+{
+  "$schema": "https://rcade.dev/manifest.schema.json",
+  "name": "krazy-kitchen",
+  "display_name": "Krazy Kitchen",
+  "description": "Don't make a scene!",
+  "visibility": "private",
+  "authors": [
+    {
+      "display_name": "Binh Robles"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "@rcade/input-classic",
+      "version": "1.0.0"
+    }
+  ]
+}
