@@ -26,10 +26,13 @@ export class Player implements Entity {
 
   update(dt: number): void {
     // add new input to existing velocity
-    this.vel += getHorizontalInput(this.playerIndex);
+    const input = getHorizontalInput(this.playerIndex);
+    this.vel += input;
 
-    // velocity naturally decays due to friction
-    this.vel *= PLAYER.FRICTION;
+    // less friction while accelerating, more friction when coasting
+    const isAccelerating = input !== 0 && Math.sign(input) === Math.sign(this.vel);
+    const friction = isAccelerating ? PLAYER.FRICTION_ACCEL : PLAYER.FRICTION_DECEL;
+    this.vel *= friction;
     this.vel = Math.max(-PLAYER.MAX_SPEED, Math.min(PLAYER.MAX_SPEED, this.vel));
 
     // update pos.x += vel.x * dt, clamp to screen bounds

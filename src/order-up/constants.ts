@@ -1,8 +1,9 @@
 export const PLAYER = {
-  WIDTH: 16,
-  HEIGHT: 20,
+  WIDTH: 20,
+  HEIGHT: 25,
   Y_POSITION: 230,
-  FRICTION: 0.9,
+  FRICTION_ACCEL: 0.9,
+  FRICTION_DECEL: 0.7,
   MAX_SPEED: 0.3,
   INVINCIBILITY_MS: 500,
 } as const;
