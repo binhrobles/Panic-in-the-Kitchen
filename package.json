@@ -10,7 +10,8 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
+    "fmt:check": "oxfmt --check",
+    "generate-run": "bun src/generate-run.ts"
   },
   "dependencies": {
     "@rcade/plugin-input-classic": "^0.2.1",

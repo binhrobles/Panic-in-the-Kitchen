@@ -1,7 +1,7 @@
 import { SCREEN } from "../shared/constants";
 import { getHorizontalInput } from "../shared/input";
 import type { Vec2, Entity } from "../shared/types";
-import { PLAYER, type Grade } from "./constants";
+import { PLAYER } from "./constants";
 
 const MAX_PLAYER_POS = SCREEN.WIDTH - PLAYER.WIDTH;
 
@@ -10,7 +10,7 @@ export class Player implements Entity {
   size: Vec2;
   vel: number;
   color: string;
-  grade: Grade = "A+";
+  dishes: number = 0;
   invincibleUntil: number = 0;
   playerIndex: number;
 
@@ -41,36 +41,13 @@ export class Player implements Entity {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
+    // blink while invincible (skip every other 100ms frame)
+    if (performance.now() < this.invincibleUntil) {
+      if (Math.floor(performance.now() / 100) % 2 === 0) return;
+    }
     ctx.fillStyle = this.color;
     ctx.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
   }
 }
 
-export type ObstacleType = "static" | "moving" | "chokepoint";
-
-export class Obstacle implements Entity {
-  pos: Vec2;
-  size: Vec2;
-  vel: number;
-  color: string;
-  type: ObstacleType;
-
-  constructor(type: ObstacleType, pos: Vec2, size: Vec2) {
-    this.type = type;
-    this.pos = { ...pos };
-    this.size = { ...size };
-    this.vel = 0;
-    this.color = "";
-    // TODO: set color based on type (COLORS.OBSTACLE_*)
-    // set vel.x for moving obstacles (oscillation speed)
-  }
-
-  update(_dt: number): void {
-    // TODO: handle independent movement only (moving type oscillates pos.x)
-    // Y movement is driven by RunningState (scrollSpeed varies during slowdown)
-  }
-
-  draw(_ctx: CanvasRenderingContext2D): void {
-    // TODO: ctx.fillStyle = this.color; ctx.fillRect(...)
-  }
-}
+export { Obstacle, type ObstacleType } from "./obstacle";
