@@ -8,14 +8,14 @@ import {
   PLAYER_2 as PLAYER_2_SPINNER,
 } from "@rcade/plugin-input-spinners";
 
-export function detectStartInput(): number | null {
+export const detectStartInput = (): number | null => {
   if (SYSTEM.ONE_PLAYER) return 1;
   if (SYSTEM.TWO_PLAYER) return 2;
   return null;
-}
+};
 
 /** Returns horizontal delta this frame. Reads spinner (primary) or D-pad (fallback). */
-export function getHorizontalInput(playerIndex: number): number {
+export const getHorizontalInput = (playerIndex: number): number => {
   const spinner = playerIndex === 1 ? PLAYER_1_SPINNER.SPINNER : PLAYER_2_SPINNER.SPINNER;
   const spinnerDelta = spinner.consume_step_delta();
 
@@ -35,4 +35,4 @@ export function getHorizontalInput(playerIndex: number): number {
   }
 
   return 0;
-}
+};

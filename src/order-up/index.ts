@@ -1,5 +1,6 @@
 import { SCREEN } from "../shared/constants";
 import { detectStartInput } from "../shared/input";
+import { bounceCollision, checkAABB } from "../shared/physics";
 import { COLORS } from "./constants";
 import { Player } from "./entities";
 
@@ -149,6 +150,10 @@ export class OrderUpGame {
 
     // 6. check player-obstacle collisions → grade drop + slowdown + invincibility
     // 7. check player-player collisions (2P) → momentum transfer
+    if (this.player_2 && checkAABB(this.player_1!, this.player_2)) {
+      bounceCollision(this.player_1!, this.player_2);
+    }
+
     // 8. check if scrollDistance >= totalRunLength → changeScene('results')
   }
 

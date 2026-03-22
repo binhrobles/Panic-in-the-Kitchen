@@ -30,7 +30,7 @@ export class Player implements Entity {
 
     // velocity naturally decays due to friction
     this.vel *= PLAYER.FRICTION;
-    this.vel = Math.min(this.vel, PLAYER.MAX_SPEED);
+    this.vel = Math.max(-PLAYER.MAX_SPEED, Math.min(PLAYER.MAX_SPEED, this.vel));
 
     // update pos.x += vel.x * dt, clamp to screen bounds
     this.pos.x += this.vel * dt;

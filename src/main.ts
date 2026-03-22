@@ -12,7 +12,7 @@ const game = new OrderUpGame();
 
 let lastTime = performance.now();
 
-function loop(now: number): void {
+const loop = (now: number): void => {
   const dt = now - lastTime;
   lastTime = now;
 
@@ -20,6 +20,6 @@ function loop(now: number): void {
   game.draw(ctx);
 
   requestAnimationFrame(loop);
-}
+};
 
 requestAnimationFrame(loop);
